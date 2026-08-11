@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CineNow</title>
+  <link rel="stylesheet" href="dashboardStyle.css">
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="logo">CineNow</div>
+    <% if (isLoggedin) { %>
+      <a href="/logout" class="login-btn">Logout</a>
+    <% } else { %>
+      <a href="/signup" class="login-btn">Sign Up</a>
+      <a href="/login" class="login-btn">Login</a>
+    <% } %>
+  </header>
+
+  <main class="hero">
+    <div class="movie-card">
+      <img src="https://via.placeholder.com/300x440?text=Movie+Poster" alt="Movie Poster" class="poster">
+      <h1 class="movie-title">Spiderman: Brand New Day</h1>
+      <p class="movie-sub">Now Showing</p>
+      <button class="book-btn">Book a Seat</button>
+    </div>
+  </main>
+
+</body>
+</html>
