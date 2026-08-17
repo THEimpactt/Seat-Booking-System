@@ -16,9 +16,9 @@ const store = MongoStore.create({
 });
 
 app.use(session({
-  secret: 'book1',
+  secret: process.env.SESSION_KEY,
   resave: false,
-  saveUninitialized: true,
+  saveUninitialized: false,
   store: store
 }));
 
@@ -29,7 +29,6 @@ app.use((req, res, next) => {
 
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({ extended: true }));
-
 
 app.use(authRouter);
 app.use(dashboardRouter);
