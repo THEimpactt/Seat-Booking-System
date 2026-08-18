@@ -4,9 +4,11 @@ const app = express();
 const mongoose = require('mongoose');
 const session = require('express-session');
 const {MongoStore} = require('connect-mongo');
+const bodyParser = require('body-parser');
 const authRouter = require('./routes/authRouter');
 const dashboardRouter = require('./routes/dashboardRouter');
-const bodyParser = require('body-parser');
+const adminRouter = require('./routes/adminRouter');
+const addMovieRouter = require('./routes/addMovieRouter');
 
 app.set('view engine', 'ejs');
 
@@ -32,6 +34,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(authRouter);
 app.use(dashboardRouter);
+app.use(adminRouter);
+app.use(addMovieRouter);
 
 mongoose.connect(process.env.MONGO_URI)
 .then(() => {

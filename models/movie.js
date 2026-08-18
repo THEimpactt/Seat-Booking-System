@@ -10,7 +10,8 @@ const movieSchema = mongoose.Schema({
     required: true
   },
   totalSeats:{
-    required: true
+    type: Number,
+    required: true,
   }
 })
 
