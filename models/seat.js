@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 
 const seatSchema = mongoose.Schema({
   seatNumber: {
-    unique: true,
     type: String,
     required: true
   },

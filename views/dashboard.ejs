@@ -20,12 +20,17 @@
   </header>
 
   <main class="hero">
-    <div class="movie-card">
-      <img src="https://via.placeholder.com/300x440?text=Movie+Poster" alt="Movie Poster" class="poster">
-      <h1 class="movie-title">Spiderman: Brand New Day</h1>
-      <p class="movie-sub">Now Showing</p>
-    </div>
+    <% if (movies && movies.length > 0) { %>
+      <% movies.forEach(movie => { %>
+        <div class="movie-card">
+          <img src="https://via.placeholder.com/300x440?text=Movie+Poster" alt="Movie Poster" class="poster">
+          <h1 class="movie-title"><%= movie.title %></h1>
+          <a href="/movie/<%= movie._id %>/seats" class="book-btn">Book a Seat</a>
+        </div>
+      <% }); %>
+    <% } else { %>
+      <p>No movies found</p>
+    <% } %>
   </main>
-
 </body>
 </html>
