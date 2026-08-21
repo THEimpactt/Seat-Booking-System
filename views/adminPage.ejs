@@ -6,8 +6,25 @@
   <title>admin page</title>
 </head>
 <body>
+  <div class="container">
   <h1>Admin Page</h1>
-  <a href="/">Home</a>
-  <a href="/add-movie">Add Movie</a>
+    <a href="/">Home</a>
+    <a href="/add-movie">Add Movie</a>
+  </div>
+  <div class="added-movies">  
+    <h2>Added Movies</h2>
+    <ul>
+      <% if (movies && movies.length > 0) { %>
+        <% movies.forEach(movie => { %>
+          <li><%= movie.title %> <form action="/delete-movie/<%= movie._id %>" method="post">
+            <input type="hidden" name="id" value="<%= movie._id %>">
+            <button type="submit">Delete</button>
+          </form></li>
+        <% }); %>
+      <% } else { %>
+        <li>No movies found</li>
+      <% } %>
+    </ul>
+  </div>
 </body>
 </html>

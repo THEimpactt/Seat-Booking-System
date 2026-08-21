@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Select Seats</title>
+  <link rel="stylesheet" href="/seatStyle.css">
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="logo">CineNow</div>
+    <div class="topbar-actions">
+      <% if (isLoggedin) { %>
+        <a href="/logout" class="login-btn">Logout</a>
+      <% } else { %>
+        <a href="/signup" class="login-btn">Sign Up</a>
+        <a href="/login" class="login-btn">Login</a>
+      <% } %>
+      <a href="/" class="admin-btn">Home</a>
+    </div>
+  </header>
+
+  <main class="seat-page">
+    <h1 class="page-title"><%= movie.title %></h1>
+    <p class="page-subtitle">Showtime: <%= movie.showtime %></p>
+
+    <div class="legend">
+      <span class="legend-item"><span class="legend-box available"></span> Available</span>
+      <span class="legend-item"><span class="legend-box selected"></span> Selected</span>
+      <span class="legend-item"><span class="legend-box booked"></span> Booked</span>
+    </div>
+
+    <div class="screen">SCREEN</div>
+
+    <div class="seat-layout">
+      <%
+        const seatsByRow = {};
+        seats.forEach((seat) => {
+          const row = seat.seatNumber[0];
+          if (!seatsByRow[row]) seatsByRow[row] = [];
+          seatsByRow[row].push(seat);
+        });
+        const rowLabels = Object.keys(seatsByRow).sort();
+      %>
+      <% rowLabels.forEach((row) => { %>
+        <div class="seat-row">
+          <span class="row-label"><%= row %></span>
+          <% seatsByRow[row].forEach((seat, idx) => { %>
+            <button
+              type="button"
+              class="seat <%= seat.isBooked ? 'booked' : 'available' %>"
+              data-seat-id="<%= seat._id %>"
+              data-seat="<%= seat.seatNumber %>"
+              aria-label="Seat <%= seat.seatNumber %><%= seat.isBooked ? ' (booked)' : '' %>"
+              <%= seat.isBooked ? 'disabled' : '' %>
+            ><%= seat.seatNumber.slice(1) %></button>
+            <% if (idx === 2) { %><span class="aisle"></span><% } %>
+          <% }); %>
+        </div>
+      <% }); %>
+    </div>
+
+    <div class="booking-summary">
+      <p>Selected: <span id="selected-seats">None</span></p>
+      <button type="button" id="confirm-btn" class="confirm-btn" disabled>Confirm Booking</button>
+    </div>
+  </main>
+
+  <script>
+    const seats = document.querySelectorAll('.seat.available');
+    const selectedSeatsEl = document.getElementById('selected-seats');
+    const confirmBtn = document.getElementById('confirm-btn');
+    const selected = new Set();
+
+    seats.forEach((seat) => {
+      seat.addEventListener('click', () => {
+        const id = seat.dataset.seat;
+
+        if (selected.has(id)) {
+          selected.delete(id);
+          seat.classList.remove('selected');
+        } else {
+          if (selected.size >= 6) return;
+          selected.add(id);
+          seat.classList.add('selected');
+        }
+
+        if (selected.size === 0) {
+          selectedSeatsEl.textContent = 'None';
+          confirmBtn.disabled = true;
+        } else {
+          selectedSeatsEl.textContent = [...selected].sort().join(', ');
+          confirmBtn.disabled = false;
+        }
+      });
+    });
+
+    confirmBtn.addEventListener('click', async () => {
+      const seatEls = [...document.querySelectorAll('.seat.selected')];
+      const seatIds = seatEls.map(el => el.dataset.seatId);
+
+      confirmBtn.disabled = true;
+      confirmBtn.textContent = 'Booking...';
+
+      try {
+        const res = await fetch(`/movie/<%= movie._id %>/book`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ seatIds })
+        });
+        const data = await res.json();
+
+        if (data.success) {
+          window.location.reload();
+        } else {
+          alert(data.message);
+          confirmBtn.disabled = false;
+          confirmBtn.textContent = 'Confirm Booking';
+        }
+      } catch (err) {
+        alert('Network error, please try again.');
+        confirmBtn.disabled = false;
+        confirmBtn.textContent = 'Confirm Booking';
+      }
+    });
+  </script>
+
+</body>
+</html>

@@ -8,10 +8,6 @@ const movieSchema = mongoose.Schema({
   showtime:{
     type: String,
     required: true
-  },
-  totalSeats:{
-    type: Number,
-    required: true,
   }
 })
 

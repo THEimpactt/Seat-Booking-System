@@ -13,6 +13,10 @@ const seatSchema = mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Movie',
     required: true
+  },
+  bookedBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
   }
 });
 
