@@ -1,6 +1,7 @@
 const { check, validationResult } = require("express-validator");
 const bcrypt = require('bcrypt');
 const User = require('../models/user');
+const ADMIN = 'admin@gmail.com';
 
 exports.getLogin = (req, res) => {
   res.render('auth/loginPage', { isLoggedin: req.session.isLoggedin || false,
@@ -35,7 +36,8 @@ exports.isLoggedin = async (req, res) => {
   req.session.user = {
     id: user._id,
     userName: user.userName,
-    email: user.email
+    email: user.email,
+    isAdmin: user.email === ADMIN
   }
   req.session.save(err => {
     if (err) console.error(err);

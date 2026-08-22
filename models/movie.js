@@ -8,6 +8,10 @@ const movieSchema = mongoose.Schema({
   showtime:{
     type: String,
     required: true
+  },
+  photo:{
+    type: String,
+    required: true
   }
 })
 

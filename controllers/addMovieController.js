@@ -8,7 +8,8 @@ exports.getAddMoviePage = (req, res) => {
 exports.addMovie = async (req, res) => {
   try {
     const { title, showtime } = req.body;
-    const movie = new Movie({ title, showtime });
+    const photo = req.file ? req.file.filename : undefined;
+    const movie = new Movie({ title, showtime, photo });
     await movie.save();
 
     const seats = [];

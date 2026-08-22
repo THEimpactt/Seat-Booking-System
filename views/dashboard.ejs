@@ -3,28 +3,31 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CineNow</title>
+  <title>Project 1</title>
   <link rel="stylesheet" href="dashboardStyle.css">
 </head>
 <body>
 
   <header class="topbar">
-    <div class="logo">CineNow</div>
+    <div class="logo">WIP</div>
     <% if (isLoggedin) { %>
-      <a href="/logout" class="login-btn">Logout</a>
+      <a href="/logout" class="logout-btn">Logout</a>
     <% } else { %>
-      <a href="/signup" class="login-btn">Sign Up</a>
+      <a href="/signup" class="signup-btn">Sign Up</a>
       <a href="/login" class="login-btn">Login</a>
     <% } %>
+    <% if (isLoggedin && user && user.isAdmin) { %>
     <a href="/admin" class="admin-btn">Admin</a>
+    <% } %>
   </header>
 
   <main class="hero">
     <% if (movies && movies.length > 0) { %>
       <% movies.forEach(movie => { %>
         <div class="movie-card">
-          <img src="https://via.placeholder.com/300x440?text=Movie+Poster" alt="Movie Poster" class="poster">
+          <img src="/uploads/<%= movie.photo %>" alt="Movie Poster" class="poster">
           <h1 class="movie-title"><%= movie.title %></h1>
+          <p class="page-subtitle">Showtime: <%= movie.showtime %></p>
           <a href="/movie/<%= movie._id %>/seats" class="book-btn">Book a Seat</a>
         </div>
       <% }); %>

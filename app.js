@@ -4,6 +4,7 @@ const app = express();
 const mongoose = require('mongoose');
 const session = require('express-session');
 const {MongoStore} = require('connect-mongo');
+const multer = require('multer');
 const bodyParser = require('body-parser');
 const authRouter = require('./routes/authRouter');
 const dashboardRouter = require('./routes/dashboardRouter');
@@ -12,6 +13,19 @@ const addMovieRouter = require('./routes/addMovieRouter');
 const seatRouter = require('./routes/seatRouter');
 
 app.set('view engine', 'ejs');
+
+const fileFilter = (req,file,cb)=>{
+  if(file.mimetype === 'image/png' || file.mimetype === 'image/jpg' || file.mimetype === 'image/jpeg'){
+    cb(null, true)
+  }
+  else{
+    cb(null, false)
+  }
+}
+
+const multerOptions = {
+  dest: 'uploads/', fileFilter
+}
 
 const store = MongoStore.create({
   mongoUrl: process.env.MONGO_URI,
@@ -31,7 +45,9 @@ app.use((req, res, next) => {
 });
 
 app.use(express.static('public'));
+app.use('/uploads', express.static('uploads'));
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(multer(multerOptions).single('photo'));
 app.use(bodyParser.json());
 
 app.use(authRouter);
